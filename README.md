@@ -1,5 +1,8 @@
 # find-non-translated-keys-resx
-Find the keys that are not translated in your .NET resx files.
+Find the keys that are not translated in your .NET resx language files.
+
+It expects all the keys in your neutral language (`Settings.aspx.rex`) resource
+file exist in your others languages files (`Settings.aspx.fr.resx`).
 
 ## How to use it
 Clone the repo and execute:
@@ -14,15 +17,6 @@ It looks for every `.resx` in the folder you give, and all the lang variations
 you want (in the example above : `.fr.resx`, `.pt.resx`, `.de.resx`, `.es.resx`),
 then check if all the keys in the base `.resx` (which is the neutral language
 resource file) exists in the other language (if the file exists).
-
-## Structure expected
-```
-Settings.resx
-Settings.fr.resx
-Settings.pt.resx
-Settings.de.resx
-Settings.en.resx
-```
 
 ## Output
 ```
@@ -43,3 +37,12 @@ UserParameter
 
 Here, `CloseDialog` and `UserParameter` keys do not exist in the `de` and `es`
 variations, but they exist in neutral `Settings.aspx.resx`.
+
+## Structure expected
+```
+Settings.aspx.resx
+Settings.aspx.fr.resx
+Settings.aspx.pt.resx
+Settings.aspx.de.resx
+Settings.aspx.en.resx
+```

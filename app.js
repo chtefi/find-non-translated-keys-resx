@@ -2,14 +2,12 @@ import groupBy from 'lodash/collection/groupBy';
 import difference from 'lodash/array/difference';
 import async from 'async';
 
-import parseArguments from './parseArguments.js';
-import getAllResxFilenames from './getAllResxFilenames.js';
-import createTasksToReadFiles from './createTasksToReadFiles.js';
-
+import parseArguments from './src/parseArguments.js';
+import getAllResxFilenames from './src/getAllResxFilenames.js';
+import createTasksToReadFiles from './src/createTasksToReadFiles.js';
 
 const args = process.argv.slice(2);
 const { resxFolder, languages } = parseArguments(args);
-
 
 getAllResxFilenames(resxFolder, (err, files) => {
 
@@ -39,16 +37,16 @@ getAllResxFilenames(resxFolder, (err, files) => {
       const neutralKeys = neutralLangItem.keys;
 
       // check that each language in the group has all those keys
-      groups[group]
+      var deltas = groups[group]
         .filter(notNeutralLang)
-        .forEach(result => {
-          const delta = difference(neutralKeys, result.keys);
-          if (delta.length > 0) {
-            console.log(`${result.fileName} does not have those keys:`);
-            console.log(delta.join('\n'));
-            console.log();
-          }         
-        });
+        .map(result => findMissingKeys(result.fileName, neutralKeys, result.keys))
+        .filter(difference => difference.keys.length > 0);
+
+      deltas.forEach((delta) => {
+        console.log(`# ${delta.fileName}`);
+        console.log(delta.keys.join('\n'));
+        console.log();
+      });
 
       /**
       * Return true if the given group is not about the neutral lang.
@@ -64,4 +62,12 @@ getAllResxFilenames(resxFolder, (err, files) => {
 
 });
 
+
+function findMissingKeys(fileName, neutralKeys, keys) {
+  const delta = difference(neutralKeys, keys);
+  return {
+    fileName,
+    keys: delta
+  };
+}
 

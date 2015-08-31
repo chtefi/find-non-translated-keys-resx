@@ -1,7 +1,7 @@
 {
   "name": "missing-resx",
   "version": "1.0.0",
-  "description": "",
+  "description": "Find the keys that are not translated in your .NET resx language files.",
   "main": "app.js",
   "dependencies": {
     "async": "^1.4.2",
@@ -11,11 +11,26 @@
     "minimist": "^1.2.0",
     "xml2js": "^0.4.10"
   },
+  "keywords": [
+    "resx",
+    "language"
+  ],
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "list": "babel-node app.js"
   },
   "author": "Stéphane D.",
-  "license": "ISC"
+  "license": "MIT",
+  "bin": {
+    "missing-resx": "missingkeys.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chtefi/find-non-translated-keys-resx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chtefi/find-non-translated-keys-resx/issues"
+  },
+  "homepage": "https://github.com/chtefi/find-non-translated-keys-resx#readme"
 }
