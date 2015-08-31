@@ -7,9 +7,9 @@ file exist in your others languages files (`Settings.aspx.fr.resx`).
 ## How to use it
 Clone the repo and execute:
 
-```
-npm install
-npm run list -- --langs fr,pt,de,es c:\Code\Desktop
+```shell
+$ npm install
+$ babel-node ./bin/missingkeys --langs fr,pt,de,es c:\Code\Desktop
 ```
 
 ## How does it work
@@ -19,19 +19,18 @@ then check if all the keys in the base `.resx` (which is the neutral language
 resource file) exists in the other language (if the file exists).
 
 ## Output
-```
-npm run list -- --langs fr,pt,de,es c:\Code\Desktop
-
-c:/Code/Desktop/App_GlobalResources/Global.de.resx does not have those keys:
+```shell
+$ babel-node ./bin/missingkeys --langs fr,pt,de,es c:\Code\Desktop
+# c:/Code/Desktop/App_GlobalResources/Global.de.resx
 CloseDialog
 
-c:/Code/Desktop/App_GlobalResources/Global.es.resx does not have those keys:
+# c:/Code/Desktop/App_GlobalResources/Global.es.resx
 CloseDialog
 
-c:/Code/Desktop/User/App_LocalResources/Settings.aspx.de.resx does not have those keys:
+# c:/Code/Desktop/User/App_LocalResources/Settings.aspx.de.resx
 UserParameter
 
-c:/Code/Desktop/User/App_LocalResources/Settings.aspx.es.resx does not have those keys:
+# c:/Code/Desktop/User/App_LocalResources/Settings.aspx.es.resx
 UserParameter
 ```
 
