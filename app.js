@@ -1,27 +1,20 @@
-var path = require('path');
-var fs = require('fs');
-var groupBy = require('lodash/collection/groupBy');
-var difference = require('lodash/array/difference');
-var glob = require('glob');
-var parseXml = require('xml2js').parseString;
-var async = require('async');
-var minimist = require('minimist');
+import path from 'path';
+import fs from 'fs';
+import groupBy from 'lodash/collection/groupBy';
+import difference from 'lodash/array/difference';
+import glob from 'glob';
+import async from 'async';
 
-var argv = require('minimist')(process.argv.slice(2));
-const BASE_LANG = argv.baseLang;
-const LANGS = argv.langs.split(',')
+import parseArguments from './parseArguments.js';
+import getResxKeys from './getResxKeys.js';
+
+const args = process.argv.slice(2);
+const { resxFolder, languages } = parseArguments(args);
 
 
-const FOLDER = argv._[0];
-if (!FOLDER) {
-  console.error('Please specify a folder');
-  process.exit(0);
-}
-
-var GLOB = path.join(FOLDER, '**', '*.resx');
+var GLOB = path.join(resxFolder, '**', '*.resx');
 
 var options = {};
-
 glob(GLOB, options, (err, files) => {
 
   // create tasks to read all file contents in parallel
@@ -38,36 +31,25 @@ glob(GLOB, options, (err, files) => {
           return;
         }
 
-        // when we have the content, parse it
-        parseXml(data, (err, result) => {
+        getResxKeys(data, (err, keys) => {
           if (err) {
-            callback(fileName + " xml: " + err, null);
-            return;
+            callback(err, null);
           }
 
-          if (!result.root.data) {
-            callback(null, { group, fileName, lang, keys: [] });
-            return;
-          }
-
-          // and read all its keys
-          var keys = result.root.data.map(node => node.$.name);
-
-          // and callback with the results
           callback(null, {
             group,
             fileName,
             lang,
             keys
           });
-
         });
+
       });
 
   });
 
   // parallel read!
-  async.parallelLimit(tasks, 10, (err, results) => {
+  async.parallel(tasks, (err, results) => {
     if (err) {
       throw Error(err)
     }
@@ -79,20 +61,20 @@ glob(GLOB, options, (err, files) => {
     // for each of those resource group
     Object.keys(groups).forEach((group) => {
 
-      // find the base lang to get the keys that should exist everywhere
-      const baseLangItem = groups[group].filter(g => g.lang === BASE_LANG)[0];
-      if (!baseLangItem) {
-        console.error('no ' + BASE_LANG + ' found for ' + group);
+      // find the neutral language to get the keys that should exist everywhere
+      const neutralLangItem = groups[group].filter(g => g.lang === null)[0];
+      if (!neutralLangItem) {
+        console.error('no neutral language found for ' + group);
         return;
       }
 
-      const baseKeys = baseLangItem.keys;
+      const neutralKeys = neutralLangItem.keys;
 
       // check that each language in the group has all those keys
       groups[group]
-        .filter(notBaseLang)
+        .filter(notNeutralLang)
         .forEach(result => {
-          const delta = difference(baseKeys, result.keys);
+          const delta = difference(neutralKeys, result.keys);
           if (delta.length > 0) {
             console.log(`${result.fileName} does not have those keys:`);
             console.log(delta.join('\n'));
@@ -101,10 +83,10 @@ glob(GLOB, options, (err, files) => {
         });
 
       /**
-      * Return true if the given group is not about the base lang.
+      * Return true if the given group is not about the neutral lang.
       */
-      function notBaseLang(group) {
-        return group.lang !== BASE_LANG;
+      function notNeutralLang(group) {
+        return group.lang !== null;
       }
 
     });
@@ -123,15 +105,15 @@ function getLang(fileName) {
 
   if (lang === 'aspx' /* localResources: FormulaQuery.aspx.resx */
    || lang === undefined  /* globalResources: TeamUserProperties.resx */ ) {
-    return BASE_LANG;
+    return null;
   }
   return lang;
 }
 
 /**
- * Return true if the given fileName is the base lang or one of the lang we want.
+ * Return true if the given fileName is the neutral lang or one of the lang we want.
  */
 function filterLang(fileName) {
-  var l = getLang(fileName);
-  return l === BASE_LANG || LANGS.indexOf(getLang(fileName)) >= 0;
+  var lang = getLang(fileName);
+  return lang === null || languages.indexOf(lang) >= 0;
 }

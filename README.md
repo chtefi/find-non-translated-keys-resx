@@ -12,7 +12,7 @@ npm run list -- --langs fr,pt,de,es c:\Code\Desktop
 ## How does it work
 It looks for every `.resx` in the folder you give, and all the lang variations
 you want (in the example above : `.fr.resx`, `.pt.resx`, `.de.resx`, `.es.resx`),
-then check if all the keys in the base `.resx` (which is the master language
+then check if all the keys in the base `.resx` (which is the neutral language
 resource file) exists in the other language (if the file exists).
 
 ## Structure expected
@@ -25,7 +25,6 @@ Settings.en.resx
 ```
 
 ## Output
-
 ```
 npm run list -- --langs fr,pt,de,es c:\Code\Desktop
 
@@ -43,4 +42,4 @@ UserParameter
 ```
 
 Here, `CloseDialog` and `UserParameter` keys do not exist in the `de` and `es`
-variations, but they exist in `Settings.aspx.resx`.
+variations, but they exist in neutral `Settings.aspx.resx`.
