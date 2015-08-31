@@ -6,7 +6,7 @@ export default function parseArguments(stringArgs) {
   
   // langs
   if (Array.isArray(args.langs)) {
-  	console.error('Please specify a list of language to check: --langs fr,de');
+  	console.error('ERR: Please specify a list of language to check: --langs fr,de');
   	process.exit(0);
   }
   const languages = args.langs.split(',');
@@ -14,7 +14,7 @@ export default function parseArguments(stringArgs) {
   // resxFolder
   const resxFolder = args._[0];
   if (!resxFolder) {
-    console.error('Please specify the folder containing the .resx files');
+    console.error('ERR: Please specify the folder containing the .resx files');
     process.exit(0);
   }
 
