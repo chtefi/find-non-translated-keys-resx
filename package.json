@@ -4,12 +4,12 @@
   "description": "Find the keys that are not translated in your .NET resx language files.",
   "main": "app.js",
   "dependencies": {
-    "async": "^1.4.2",
-    "babel": "^5.8.23",
-    "glob": "^5.0.14",
-    "lodash": "^3.10.1",
-    "minimist": "^1.2.0",
-    "xml2js": "^0.4.10"
+    "async": "1.4.2",
+    "babel": "5.8.23",
+    "glob": "5.0.14",
+    "lodash": "3.10.1",
+    "minimist": "1.2.0",
+    "xml2js": "0.4.12"
   },
   "keywords": [
     "resx",
