@@ -4,7 +4,7 @@
   "description": "Find the keys that are not translated in your .NET resx language files.",
   "main": "app.js",
   "dependencies": {
-    "async": "^1.4.2",
+    "async": "^1.5.0",
     "babel": "^5.8.23",
     "glob": "^5.0.14",
     "lodash": "^3.10.1",
