@@ -6,7 +6,7 @@
   "dependencies": {
     "async": "^1.4.2",
     "babel": "^5.8.23",
-    "glob": "^5.0.14",
+    "glob": "^6.0.2",
     "lodash": "^3.10.1",
     "minimist": "^1.2.0",
     "xml2js": "^0.4.12"
